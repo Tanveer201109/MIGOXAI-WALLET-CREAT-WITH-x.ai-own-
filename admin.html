@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MIGOXAI • Admin Wallet</title>
+<style> /* আগের মতো স্টাইল */ body{background:#0a0a0c;color:#ddd;font-family:Inter,sans-serif;padding:20px} </style>
+</head>
+<body>
+<div style="max-width:1100px;margin:auto;">
+  <h1 class="logo">MIGOXAI Admin Wallet</h1>
+  
+  <div class="glass">
+    <h3>Platform Counts</h3>
+    <div id="counts"></div>
+  </div>
+
+  <div class="glass">
+    <h3>Submissions</h3>
+    <table id="table" style="width:100%;border-collapse:collapse;"></table>
+  </div>
+
+  <button onclick="distribute()" class="btn" style="background:#00ff9d;color:black;">Distribute Tokens</button>
+</div>
+
+<script>
+async function loadData() {
+  const res = await fetch('/api/all-submissions');
+  const subs = await res.json();
+  // table populate code এখানে (আগের মতো)
+  console.log(subs);
+  // আপনি চাইলে পুরো table populate code দিতে পারি
+}
+
+async function distribute() {
+  await fetch('/api/distribute', {method: 'POST'});
+  alert("Tokens distributed");
+}
+
+window.onload = loadData;
+</script>
+</body>
+</html>

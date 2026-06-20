@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MIGOXAI • Public Wallet</title>
+<style> /* আগের Public HTML এর স্টাইল + সামান্য আপডেট */ 
+  body { background:#0a0a0c; color:#ddd; font-family:Inter,sans-serif; padding:20px; }
+  .glass { background:rgba(15,15,18,0.75); backdrop-filter:blur(20px); border:1px solid #222; border-radius:16px; padding:24px; margin-bottom:20px; }
+  .logo { font-size:28px; background:linear-gradient(90deg,#c8102e,#00ff9d); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .btn { padding:12px; border:none; border-radius:10px; cursor:pointer; }
+  .red { background:#c8102e; color:white; } .green { background:#00ff9d; color:black; font-weight:600; }
+</style>
+</head>
+<body>
+<div style="max-width:800px; margin:auto;">
+  <h1 class="logo">MIGOXAI Public Wallet</h1>
+  
+  <div class="glass">
+    <input id="username" placeholder="Your Username" value="tanveer" style="padding:10px; width:100%; margin-bottom:10px;">
+    <button onclick="connectPlatform('Grok')" class="btn green">Connect Grok</button>
+    <button onclick="connectPlatform('Gemini')" class="btn green">Connect Gemini</button>
+    <button onclick="connectPlatform('Copilot')" class="btn green">Connect Copilot</button>
+    <button onclick="connectPlatform('Meta')" class="btn green">Connect Meta</button>
+    <button onclick="connectPlatform('ChatGPT')" class="btn green">Connect ChatGPT</button>
+  </div>
+
+  <div class="glass">
+    <h3>Balance: <span id="balance">0</span> MIGO</h3>
+    <p id="platforms">Connected: 0</p>
+  </div>
+
+  <div class="glass">
+    <h3>Submit Bounty Proof</h3>
+    <select id="platform">
+      <option>Grok</option><option>Gemini</option><option>Copilot</option>
+      <option>Meta</option><option>ChatGPT</option>
+    </select>
+    <input id="proof" placeholder="Google Sheet / Proof Link" style="width:100%; padding:10px; margin:8px 0;">
+    <button onclick="submitProof()" class="btn red">Submit Proof</button>
+  </div>
+
+  <button onclick="claimAirdrop()" class="btn green">Claim Airdrop</button>
+</div>
+
+<script>
+const username = () => document.getElementById('username').value;
+
+async function connectPlatform(platform) {
+  await fetch('/api/connect', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ username: username(), platform })
+  });
+  loadBalance();
+}
+
+async function loadBalance() {
+  const res = await fetch('/api/my-balance/' + username());
+  const user = await res.json();
+  document.getElementById('balance').innerText = user.balance || 0;
+  document.getElementById('platforms').innerText = "Connected: " + (user.platforms?.length || 0);
+}
+
+async function submitProof() {
+  const platform = document.getElementById('platform').value;
+  const proof = document.getElementById('proof').value;
+  await fetch('/api/submit-bounty', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ username: username(), platform, proof })
+  });
+  alert("Proof submitted for admin review");
+}
+
+async function claimAirdrop() {
+  const res = await fetch('/api/my-balance/' + username());
+  const user = await res.json();
+  alert("Airdrop claimed based on your connected platforms");
+  loadBalance();
+}
+
+window.onload = loadBalance;
+</script>
+</body>
+</html>
