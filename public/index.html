@@ -1,1 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>xAios OS • T90</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;500;600&amp;display=swap');
+    
+    :root {
+      --accent: #0078d4;
+    }
+    
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+    }
+    
+    .desktop {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      background-size: cover;
+    }
+    
+    .top-bar {
+      background: rgba(15, 15, 15, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid #333;
+    }
+    
+    .os-window {
+      box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.4);
+      border: 1px solid #333;
+      transition: box-shadow 0.2s;
+    }
+    
+    .os-window:hover {
+      box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.5);
+    }
+    
+    .window-header {
+      background: #202020;
+      cursor: move;
+    }
+    
+    .desktop-icon {
+      transition: all 0.2s;
+    }
+    
+    .desktop-icon:hover {
+      transform: scale(1.05);
+      background-color: rgba(255,255,255,0.1);
+    }
+    
+    .category-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #a0a0a0;
+      letter-spacing: 0.5px;
+    }
+  </style>
+</head>
+<body class="bg-[#0f0f0f] text-white overflow-hidden">
+  
+  <!-- ===== TOP BAR ===== -->
+  <div class="top-bar fixed top-0 left-0 right-0 h-11 flex items-center px-4 z-50">
+    <div class="flex items-center gap-x-4 w-full">
+      
+      <!-- Logo + Start -->
+      <div class="flex items-center gap-x-2">
+        <div class="w-8 h-8 bg-[#0078d4] rounded flex items-center justify-center">
+          <i class="fa-solid fa-microchip text-white text-xl"></i>
+        </div>
+        <div>
+          <span class="font-semibold text-lg tracking-tighter">xAios</span>
+          <span class="text-[10px] text-blue-400 ml-1">T90</span>
+        </div>
+      </div>
 
+      <!-- Search Bar -->
+      <div class="flex-1 max-w-md">
+        <div class="relative">
+          <input type="text" 
+                 class="w-full bg-[#1f1f1f] text-sm border border-[#333] rounded-full py-1.5 pl-10 pr-4 focus:outline-none focus:border-[#0078d4]"
+                 placeholder="Search apps, files or AI...">
+          <i class="fa-solid fa-search absolute left-4 top-2.5 text-gray-400 text-sm"></i>
+        </div>
+      </div>
+
+      <!-- Right Side -->
+      <div class="flex items-center gap-x-4 text-sm">
+        <div class="flex items-center gap-x-1 px-2 py-1 rounded hover:bg-white/10">
+          <i class="fa-solid fa-wifi"></i>
+        </div>
+        <div class="flex items-center gap-x-1 px-2 py-1 rounded hover:bg-white/10">
+          <i class="fa-solid fa-battery-full"></i>
+          <span class="text-xs">98%</span>
+        </div>
+        
+        <!-- Clock -->
+        <div class="px-3 py-1 rounded hover:bg-white/10 cursor-pointer" id="clock">
+          12:45
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== DESKTOP ===== -->
+  <div class="desktop pt-11 min-h-screen p-6" id="desktop">
+    
+    <!-- Demo Categories -->
+    <div class="mb-6">
+      <h2 class="category-title mb-3 px-1">DEMO CATEGORIES</h2>
+      
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        
+        <!-- Productivity -->
+        <div>
+          <div class="category-title mb-2 px-1">Productivity</div>
+          <div class="flex gap-3">
+            <div onclick="openWindow('File Explorer', 'file-explorer')" class="desktop-icon flex flex-col items-center p-2 rounded-xl cursor-pointer">
+              <div class="w-12 h-12 bg-[#2d2d2d] rounded-xl flex items-center justify-center mb-1"><i class="fa-solid fa-folder text-3xl text-yellow-400"></i></div>
+              <span class="text-xs">File Explorer</span>
+            </div>
+            <div onclick="openWindow('Calculator', 'calculator')" class="desktop-icon flex flex-col items-center p-2 rounded-xl cursor-pointer">
+              <div class="w-12 h-12 bg-[#2d2d2d] rounded-xl flex items-center justify-center mb-1"><i class="fa-solid fa-calculator text-3xl text-white"></i></div>
+              <span class="text-xs">Calculator</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI -->
+        <div>
+          <div class="category-title mb-2 px-1">AI Features</div>
+          <div class="flex gap-3">
+            <div onclick="openWindow('xAios AI', 'ai-chat')" class="desktop-icon flex flex-col items-center p-2 rounded-xl cursor-pointer">
+              <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-[#0078d4] rounded-xl flex items-center justify-center mb-1">
+                <i class="fa-solid fa-robot text-white text-3xl"></i>
+              </div>
+              <span class="text-xs">xAios AI</span>
+            </div>
+            <div onclick="openWindow('Terminal', 'terminal')" class="desktop-icon flex flex-col items-center p-2 rounded-xl cursor-pointer">
+              <div class="w-12 h-12 bg-[#2d2d2d] rounded-xl flex items-center justify-center mb-1"><i class="fa-solid fa-terminal text-green-400 text-3xl"></i></div>
+              <span class="text-xs">Terminal</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- System -->
+        <div>
+          <div class="category-title mb-2 px-1">System</div>
+          <div class="flex gap-3">
+            <div onclick="openWindow('Settings', 'settings')" class="desktop-icon flex flex-col items-center p-2 rounded-xl cursor-pointer">
+              <div class="w-12 h-12 bg-[#2d2d2d] rounded-xl flex items-center justify-center mb-1"><i class="fa-solid fa-cog text-3xl text-gray-300"></i></div>
+              <span class="text-xs">Settings</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Windows Container -->
+  <div id="windows-container" class="absolute top-11 left-0 right-0 bottom-0 pointer-events-none"></div>
+
+  <script>
+    // Tailwind Script
+    function initializeTailwind() {
+      document.documentElement.style.setProperty('--accent', '#0078d4');
+    }
+
+    // Clock
+    function updateClock() {
+      const clock = document.getElementById('clock');
+      setInterval(() => {
+        const now = new Date();
+        clock.innerHTML = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+      }, 1000);
+    }
+
+    // Open Window
+    let windowCount = 0;
+    
+    function openWindow(title, type) {
+      const container = document.getElementById('windows-container');
+      const winId = 'win-' + Date.now();
+      
+      let content = '';
+      
+      if (type === 'ai-chat') {
+        content = `
+          <div class="p-4 h-full flex flex-col">
+            <div class="flex-1 bg-[#1a1a1a] rounded-lg p-3 overflow-auto mb-3" id="${winId}-chat">
+              <div class="text-xs text-gray-400 mb-2">xAios AI • Online</div>
+              <div class="bg-[#2a2a2a] p-2 rounded-lg text-sm mb-2 max-w-[80%]">Hello! How can I help you today?</div>
+            </div>
+            <div class="flex gap-2">
+              <input type="text" id="${winId}-input" class="flex-1 bg-[#1f1f1f] border border-[#333] rounded-lg px-3 py-2 text-sm" placeholder="Ask xAios...">
+              <button onclick="sendAIMessage('${winId}')" class="px-4 bg-[#0078d4] rounded-lg text-sm">Send</button>
+            </div>
+          </div>
+        `;
+      } 
+      else if (type === 'settings') {
+        content = `
+          <div class="p-4 space-y-4">
+            <div>
+              <div class="text-sm mb-2">Accent Color</div>
+              <div class="flex gap-2">
+                <div onclick="changeAccentColor('#0078d4')" class="w-7 h-7 rounded-full bg-[#0078d4] cursor-pointer border border-white/30"></div>
+                <div onclick="changeAccentColor('#10b981')" class="w-7 h-7 rounded-full bg-[#10b981] cursor-pointer"></div>
+                <div onclick="changeAccentColor('#8b5cf6')" class="w-7 h-7 rounded-full bg-[#8b5cf6] cursor-pointer"></div>
+                <div onclick="changeAccentColor('#f43f5e')" class="w-7 h-7 rounded-full bg-[#f43f5e] cursor-pointer"></div>
+              </div>
+            </div>
+            
+            <div>
+              <div class="text-sm mb-2">Resolution</div>
+              <select onchange="changeResolution(this.value)" class="bg-[#1f1f1f] border border-[#333] rounded px-3 py-1.5 text-sm w-full">
+                <option value="1920x1080">1920 × 1080 (Full HD)</option>
+                <option value="1366x768">1366 × 768</option>
+                <option value="2560x1440">2560 × 1440 (2K)</option>
+              </select>
+            </div>
+          </div>
+        `;
+      } 
+      else if (type === 'calculator') {
+        content = `
+          <div class="p-4">
+            <div class="bg-[#1a1a1a] p-3 rounded-lg mb-3 text-right text-2xl font-mono" id="${winId}-display">0</div>
+            <div class="grid grid-cols-4 gap-1 text-sm">
+              <button class="bg-[#2a2a2a] py-2 rounded" onclick="calcInput('${winId}', '7')">7</button>
+              <button class="bg-[#2a2a2a] py-2 rounded" onclick="calcInput('${winId}', '8')">8</button>
+              <button class="bg-[#2a2a2a] py-2 rounded" onclick="calcInput('${winId}', '9')">9</button>
+              <button class="bg-[#2a2a2a] py-2 rounded" onclick="calcInput('${winId}', '/')">÷</button>
+              <!-- Add more buttons similarly -->
+            </div>
+          </div>
+        `;
+      } 
+      else if (type === 'file-explorer') {
+        content = `<div class="p-4 text-sm">📁 Documents<br>📁 Downloads<br>📁 Projects<br>📁 migoxai-wallets</div>`;
+      } 
+      else if (type === 'terminal') {
+        content = `<div class="p-4 font-mono text-green-400 text-sm">xAios Terminal v1.0<br>user@xaios:~$ _</div>`;
+      }
+
+      const windowHTML = `
+        <div id="${winId}" class="os-window pointer-events-auto absolute bg-[#1c1c1c] rounded-xl overflow-hidden w-[520px] h-[420px] border border-[#333]"
+             style="top: 80px; left: ${120 + windowCount * 40}px; z-index: ${1000 + windowCount}">
+          
+          <!-- Window Header -->
+          <div class="window-header flex items-center justify-between px-4 py-2 text-sm" 
+               onmousedown="startDrag(event, '${winId}')">
+            <div class="font-medium">${title}</div>
+            <div class="flex gap-1">
+              <div onclick="minimizeWindow('${winId}')" class="w-3 h-3 bg-yellow-500 rounded-full cursor-pointer"></div>
+              <div onclick="closeWindow('${winId}')" class="w-3 h-3 bg-red-500 rounded-full cursor-pointer"></div>
+            </div>
+          </div>
+          
+          <!-- Window Content -->
+          <div class="h-[calc(100%-36px)] overflow-auto">
+            ${content}
+          </div>
+        </div>
+      `;
+      
+      container.innerHTML += windowHTML;
+      windowCount++;
+    }
+
+    // Dragging
+    let dragElement = null;
+    let offsetX = 0, offsetY = 0;
+
+    function startDrag(e, id) {
+      dragElement = document.getElementById(id);
+      const rect = dragElement.getBoundingClientRect();
+      offsetX = e.clientX - rect.left;
+      offsetY = e.clientY - rect.top;
+      
+      document.onmousemove = dragWindow;
+      document.onmouseup = stopDrag;
+    }
+
+    function dragWindow(e) {
+      if (!dragElement) return;
+      dragElement.style.left = (e.clientX - offsetX) + 'px';
+      dragElement.style.top = (e.clientY - offsetY) + 'px';
+    }
+
+    function stopDrag() {
+      document.onmousemove = null;
+      document.onmouseup = null;
+      dragElement = null;
+    }
+
+    function closeWindow(id) {
+      const win = document.getElementById(id);
+      if (win) win.remove();
+    }
+
+    function minimizeWindow(id) {
+      const win = document.getElementById(id);
+      if (win) win.style.display = 'none';
+    }
+
+    // AI Chat
+    function sendAIMessage(winId) {
+      const input = document.getElementById(winId + '-input');
+      const chat = document.getElementById(winId + '-chat');
+      
+      if (!input || !input.value.trim()) return;
+      
+      const userMsg = `<div class="bg-[#0078d4] text-white p-2 rounded-lg text-sm mb-2 max-w-[80%] ml-auto">${input.value}</div>`;
+      chat.innerHTML += userMsg;
+      
+      setTimeout(() => {
+        const aiMsg = `<div class="bg-[#2a2a2a] p-2 rounded-lg text-sm mb-2 max-w-[80%]">Thanks for your message. This is a demo response from xAios AI.</div>`;
+        chat.innerHTML += aiMsg;
+        chat.scrollTop = chat.scrollHeight;
+      }, 800);
+      
+      input.value = '';
+    }
+
+    // Settings Functions
+    function changeAccentColor(color) {
+      document.documentElement.style.setProperty('--accent', color);
+      // You can also update top bar dynamically if needed
+    }
+
+    function changeResolution(res) {
+      alert(`Resolution changed to ${res} (Demo mode)\nIn real build, this would scale the UI.`);
+    }
+
+    // Simple Calculator (basic)
+    let calcValue = '0';
+    function calcInput(winId, val) {
+      const display = document.getElementById(winId + '-display');
+      if (!display) return;
+      
+      if (val === 'C') {
+        calcValue = '0';
+      } else {
+        calcValue = calcValue === '0' ? val : calcValue + val;
+      }
+      display.textContent = calcValue;
+    }
+
+    // Initialize
+    function initOS() {
+      initializeTailwind();
+      updateClock();
+      
+      // Optional: Open one window on load for demo
+      // setTimeout(() => openWindow('xAios AI', 'ai-chat'), 1200);
+      
+      console.log('%c[xAios] OS Build initialized successfully', 'color:#0078d4');
+    }
+
+    window.onload = initOS;
+  </script>
+</body>
+</html>
